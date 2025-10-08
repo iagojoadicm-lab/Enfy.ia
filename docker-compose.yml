@@ -2,7 +2,7 @@ version: "3.9"
 services:
   app:
     build: .
-    command: npm run dev
+    command: pnpm dev
     volumes:
       - .:/app
       - /app/node_modules
@@ -16,6 +16,7 @@ services:
       - S3_ACCESS_KEY=minioadmin
       - S3_SECRET_KEY=minioadmin
       - S3_BUCKET=enfy
+      - S3_REGION=us-east-1
     depends_on:
       - db
       - minio

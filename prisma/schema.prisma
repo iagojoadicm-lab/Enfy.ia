@@ -14,17 +14,9 @@ model Patient {
   dataNascimento DateTime?
   telefone       String?
   idExterno      String?
-  religiao       String?
-  ocupacao       String?
-  escolaridade   String?
-  endereco       String?
-  responsavel    String?
-  alergias       String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   evaluations    Evaluation[]
-
-  @@index([nome])
 }
 
 model Evaluation {
@@ -46,8 +38,7 @@ model Evaluation {
   attachments    Attachment[]
   versions       EvaluationVersion[]
 
-  @@index([patientId])
-  @@index([dataAvaliacao])
+  @@index([patientId, dataAvaliacao])
 }
 
 model Lesion {
@@ -55,16 +46,16 @@ model Lesion {
   evaluation  Evaluation @relation(fields: [evaluationId], references: [id])
   evaluationId String
   rotulo      String
-  jsonPayload Json
+  jsonPayload Json?
 }
 
 model Attachment {
   id           String     @id @default(cuid())
   evaluation   Evaluation @relation(fields: [evaluationId], references: [id])
   evaluationId String
-  tipo         String
+  tipo         String?
   url          String
-  filename     String
+  filename     String?
   createdAt    DateTime   @default(now())
 }
 

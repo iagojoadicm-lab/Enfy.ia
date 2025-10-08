@@ -1,0 +1,178 @@
+{
+  "patient": {
+    "nome": "string",
+    "id_externo": "string|null",
+    "sexo": "F|M|null",
+    "religiao": "string|null",
+    "data_nascimento": "YYYY-MM-DD|null",
+    "ocupacao": "string|null",
+    "escolaridade": "string|null",
+    "endereco": "string|null",
+    "telefone": "string|null",
+    "responsavel": "string|null",
+    "alergias": "string|null"
+  },
+
+  "admissao": {
+    "data_admissao": "YYYY-MM-DD|null",
+    "habitos": {
+      "tabagista": "sim|nao|ex|desconhecido",
+      "etilista": "sim|nao|ex|desconhecido",
+      "atividade_fisica": "sim|nao|desconhecido",
+      "sedentario": "sim|nao|desconhecido",
+      "sono_horas_dia": "number|null",
+      "pet_estimacao": "sim|nao|desconhecido"
+    },
+    "antiparasitarias_dt": {
+      "dose1": "YYYY-MM-DD|null",
+      "dose2": "YYYY-MM-DD|null",
+      "dose3": "YYYY-MM-DD|null",
+      "ultima": "YYYY-MM-DD|null"
+    },
+    "peso_kg": "number|null",
+    "altura_m": "number|null",
+    "imc": "number|null"
+  },
+
+  "comorbidades": {
+    "diabetes": "boolean",
+    "has": "boolean",
+    "cardiopatia": "boolean",
+    "neoplasia": "boolean",
+    "anemia": "boolean",
+    "insuficiencia_venosa": "boolean",
+    "insuficiencia_arterial": "boolean",
+    "insuficiencia_renal": "boolean",
+    "dislipidemias": "boolean",
+    "outros": "string|null"
+  },
+
+  "medicacoes": {
+    "lista_livres": "string|null",
+    "anticoagulante": "boolean",
+    "antibioticos": "boolean",
+    "corticoides": "boolean",
+    "outras": "string|null"
+  },
+
+  "exame_fisico": {
+    "pa_mmhg": "string|null",
+    "temperatura_c": "number|null",
+    "pulso_bpm": "number|null",
+    "respiracao_irpm": "number|null",
+    "sapo2_percent": "number|null",
+    "htg": "string|null",
+    "pulso_pedioso": "string|null",
+    "pulso_tibial_posterior": "string|null"
+  },
+
+  "avaliacao_sistemas": {
+    "neurologico": [
+      "consciente","orientado","inconsciente","confuso",
+      "agitado","sonolento","torporoso","comatoso"
+    ],
+    "sensitivo_motor": [
+      "forca_preservada","forca_diminuida","parestesia","paresia","plegia"
+    ],
+    "respiratorio": [
+      "ventilacao_espontanea","oxigenoterapia","vm","traqueostomia"
+    ],
+    "pele_mucosas": [
+      "corado","palidez_cutanea","cianotico","icterico","hidratado",
+      "desidratado","dermatite","hiperpigmentacao","descamacao",
+      "bolhas","fungos_interdigital","fungo_ungueal","varizes"
+    ],
+    "cardiovascular_perfusao": [
+      "edema_mmii","baixa_saturacao","hipoxemia","pele_fria_umida",
+      "hipovolemia","hipotensao","cianose_extremidades","hipoxia"
+    ],
+    "incontinencias": {
+      "fecal": "sim|nao|desconhecido",
+      "urinaria": "sim|nao|desconhecido"
+    },
+    "mecanica_corporal": [
+      "sedentario","atividade_fisica","fisioterapia","pilates"
+    ],
+    "limitacao_fisica": [
+      "claudicacao","acamado","paraplegico","ausencia_membros"
+    ],
+    "nutricao": ["nutrido","emagrecido","obeso","caquetico"],
+    "dieta": "string|null",
+    "hidratacao": "string|null",
+    "ingestao_liquidos": "<1L/dia|>1L_e_<2L/dia|>2L/dia|null",
+    "suporte_nutricional": ["vo","sng","sne","npp_npt","gastrostomia"]
+  },
+
+  "fatores_sociais": [
+    "aceitabilidade_lesao","convivencia_familiar",
+    "analise_emocional_psicologica","suporte_financeiro"
+  ],
+
+  "exames_laboratoriais": {
+    "data_exame": "YYYY-MM-DD|null",
+    "hemograma": "string|null",
+    "hemoglobina_glicada": "string|null",
+    "glicemia_jejum": "string|null",
+    "pcr": "string|null",
+    "sodio": "string|null",
+    "potassio": "string|null",
+    "calcio": "string|null",
+    "ureia": "string|null",
+    "creatinina": "string|null",
+    "albumina": "string|null",
+    "proteinas_totais_fracoes": "string|null",
+    "colesterol_total": "string|null",
+    "triglicerides": "string|null",
+    "cultura_antibiograma": "string|null",
+    "anexos": ["string"]
+  },
+
+  "lesoes": [
+    {
+      "rotulo": "string",
+      "historia": "string|null",
+      "exames_complementares": "string|null",
+      "caracteristicas": {
+        "perilesao": [
+          "normal","hiperemiada","endurecida","edemaciada","hematoma",
+          "cianotica","bolhosa","hiperpigmentada","descamada"
+        ],
+        "borda": [
+          "descolada","aderida","tunel","macerada",
+          "hiperqueratose","hiperemiada","epitelizada"
+        ],
+        "leito": ["necrose_coagulativa","esfacelo","granulado","epitelizado"],
+        "exsudato": [
+          "seroso","sanguinolento","serosanguinolento",
+          "piosanguinolento","purulento"
+        ],
+        "odor": {
+          "grau": "ausente|leve|moderado|grau1|grau2|grau3"
+        }
+      }
+    }
+  ],
+
+  "observacoes_importantes": "string|null",
+
+  "hipotese_etiologica_intervencoes": [
+    {
+      "numero": "integer",
+      "etiologia": "LPP|UA|UV|UM|PD|QD|FO|EP|FT|ST|LO|LT|Outro",
+      "intervencoes_enfermagem": "string"
+    }
+  ],
+
+  "encaminhamentos": "string|null",
+
+  "conduta_prescricao": "string|null",
+
+  "alteracoes_prescricao": [
+    { "data": "YYYY-MM-DD", "descricao": "string" }
+  ],
+
+  "metadados_extracao": {
+    "confidence_por_campo": { "<caminho.campo>": 0.0 },
+    "evidencias": { "<caminho.campo>": "trecho da transcrição" }
+  }
+}

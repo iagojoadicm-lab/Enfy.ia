@@ -9,9 +9,9 @@
     "lint": "next lint",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "ts-node --swc prisma/seed.ts"
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.533.0",
@@ -49,5 +49,8 @@
     "tslib": "2.6.2",
     "typescript": "5.4.5",
     "vitest": "1.5.0"
+  },
+  "prisma": {
+    "seed": "ts-node --swc prisma/seed.ts"
   }
 }

@@ -5,7 +5,7 @@ const endpoint = process.env.S3_ENDPOINT ?? "http://localhost:9000";
 const bucket = process.env.S3_BUCKET ?? "enfy";
 
 const client = new S3Client({
-  region: "us-east-1",
+  region: process.env.S3_REGION ?? "us-east-1",
   endpoint,
   forcePathStyle: true,
   credentials: {
@@ -30,8 +30,13 @@ export async function uploadBuffer(buffer: Buffer, mimeType: string) {
     ? endpoint.slice(0, -1)
     : endpoint;
 
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+  const signedUrl = `${normalizedEndpoint}/${bucket}/${key}?token=${randomUUID()}&expires=${expiresAt.toISOString()}`;
+
   return {
     key,
-    url: `${normalizedEndpoint}/${bucket}/${key}`
+    url: `${normalizedEndpoint}/${bucket}/${key}`,
+    signedUrl,
+    expiresAt: expiresAt.toISOString()
   };
 }

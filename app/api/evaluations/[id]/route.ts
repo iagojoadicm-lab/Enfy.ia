@@ -54,6 +54,21 @@ export async function PUT(request: Request, { params }: Params) {
     }
   });
 
+  if (Array.isArray(data.lesoes)) {
+    await prisma.lesion.deleteMany({ where: { evaluationId: evaluation.id } });
+    await Promise.all(
+      data.lesoes.slice(0, 6).map((lesion: any, index: number) =>
+        prisma.lesion.create({
+          data: {
+            evaluationId: evaluation.id,
+            rotulo: lesion.rotulo ?? `L${index + 1}`,
+            jsonPayload: lesion
+          }
+        })
+      )
+    );
+  }
+
   await prisma.evaluationVersion.create({
     data: {
       evaluationId: evaluation.id,

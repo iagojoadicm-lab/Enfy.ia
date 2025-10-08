@@ -38,5 +38,23 @@ export async function POST(request: Request) {
     }
   });
 
+  const lesions = Array.isArray(extraction.jsonPayload?.lesoes)
+    ? extraction.jsonPayload.lesoes
+    : [];
+
+  if (lesions.length) {
+    await Promise.all(
+      lesions.slice(0, 6).map((lesion: any, index: number) =>
+        prisma.lesion.create({
+          data: {
+            evaluationId: evaluation.id,
+            rotulo: lesion.rotulo ?? `L${index + 1}`,
+            jsonPayload: lesion
+          }
+        })
+      )
+    );
+  }
+
   return NextResponse.json({ id: evaluation.id });
 }

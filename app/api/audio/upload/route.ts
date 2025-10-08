@@ -18,7 +18,8 @@ export async function POST(request: Request) {
   const result = await uploadBuffer(buffer, file.type || "audio/mpeg");
 
   return NextResponse.json({
-    audioUrl: result.url,
-    sourceAudioId: result.key
+    audioUrl: result.signedUrl,
+    sourceAudioId: result.key,
+    expiresAt: result.expiresAt
   });
 }

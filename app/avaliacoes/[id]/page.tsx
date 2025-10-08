@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { prisma } from "@/src/lib/prisma";
 import { requireUser } from "@/src/lib/session";
-import { evaluationJsonSchema } from "@/src/lib/json-schema";
+import { createEmptyEvaluationPayload } from "@/src/lib/json-schema";
 
 interface Props {
   params: { id: string };
@@ -24,8 +24,9 @@ export default async function EvaluationPage({ params }: Props) {
     notFound();
   }
 
-  const payload = evaluation.jsonPayload as typeof evaluationJsonSchema;
+  const payload = evaluation.jsonPayload as ReturnType<typeof createEmptyEvaluationPayload>;
   const confidences = payload.metadados_extracao?.confidence_por_campo ?? {};
+  const evidences = payload.metadados_extracao?.evidencias ?? {};
   const showLowConfidenceBanner =
     typeof evaluation.confidenceMean === "number" && evaluation.confidenceMean < 0.7;
 
@@ -80,21 +81,25 @@ export default async function EvaluationPage({ params }: Props) {
               label="Paciente"
               value={payload.patient.nome}
               confidence={confidences["patient.nome"]}
+              evidence={evidences["patient.nome"]}
             />
             <ConfidenceField
               label="Pressão arterial"
               value={payload.exame_fisico.pa_mmhg ?? "—"}
               confidence={confidences["exame_fisico.pa_mmhg"]}
+              evidence={evidences["exame_fisico.pa_mmhg"]}
             />
             <ConfidenceField
               label="Temperatura"
               value={payload.exame_fisico.temperatura_c?.toString() ?? "—"}
               confidence={confidences["exame_fisico.temperatura_c"]}
+              evidence={evidences["exame_fisico.temperatura_c"]}
             />
             <ConfidenceField
               label="Observações"
               value={payload.observacoes_importantes ?? "—"}
               confidence={confidences["observacoes_importantes"]}
+              evidence={evidences["observacoes_importantes"]}
             />
           </div>
 
@@ -120,9 +125,10 @@ interface ConfidenceFieldProps {
   label: string;
   value: string | number | null;
   confidence?: number;
+  evidence?: string;
 }
 
-function ConfidenceField({ label, value, confidence }: ConfidenceFieldProps) {
+function ConfidenceField({ label, value, confidence, evidence }: ConfidenceFieldProps) {
   const highlight = confidence !== undefined && confidence < 0.75;
 
   return (
@@ -138,6 +144,15 @@ function ConfidenceField({ label, value, confidence }: ConfidenceFieldProps) {
         ) : null}
       </div>
       <p className="mt-2 text-sm text-slate-700">{value ?? "—"}</p>
+      {confidence !== undefined ? (
+        <div className="mt-3 h-2 rounded-full bg-slate-200">
+          <div
+            className={`h-2 rounded-full ${highlight ? "bg-amber-400" : "bg-brand-500"}`}
+            style={{ width: `${Math.min(100, Math.max(0, confidence * 100))}%` }}
+            title={evidence}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
