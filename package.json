@@ -1,0 +1,56 @@
+{
+  "name": "enfy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:e2e": "playwright test",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "prisma:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.533.0",
+    "@headlessui/react": "1.7.18",
+    "@heroicons/react": "2.1.1",
+    "@prisma/client": "5.13.0",
+    "@react-pdf/renderer": "3.1.14",
+    "@tanstack/react-query": "5.32.6",
+    "axios": "1.6.8",
+    "bcryptjs": "2.4.3",
+    "date-fns": "3.6.0",
+    "next": "14.2.3",
+    "next-auth": "5.0.0-beta.15",
+    "pino": "8.17.1",
+    "pino-pretty": "10.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tailwind-merge": "2.2.1",
+    "tailwindcss-animate": "1.0.7",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.43.1",
+    "@types/bcryptjs": "2.4.2",
+    "@types/node": "20.12.7",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.18",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.3",
+    "postcss": "8.4.38",
+    "prisma": "5.13.0",
+    "tailwindcss": "3.4.3",
+    "ts-node": "10.9.2",
+    "tslib": "2.6.2",
+    "typescript": "5.4.5",
+    "vitest": "1.5.0"
+  },
+  "prisma": {
+    "seed": "ts-node --swc prisma/seed.ts"
+  }
+}

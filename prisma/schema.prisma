@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id             String       @id @default(cuid())
+  nome           String
+  sexo           String?
+  dataNascimento DateTime?
+  telefone       String?
+  idExterno      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  evaluations    Evaluation[]
+}
+
+model Evaluation {
+  id             String      @id @default(cuid())
+  patient        Patient     @relation(fields: [patientId], references: [id])
+  patientId      String
+  dataAvaliacao  DateTime?
+  jsonPayload    Json
+  confidenceMean Float?
+  transcript     String?
+  audioUrl       String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  createdBy      String?
+  updatedBy      String?
+  sourceAudioId  String?
+  transcriptId   String?
+  lesions        Lesion[]
+  attachments    Attachment[]
+  versions       EvaluationVersion[]
+
+  @@index([patientId, dataAvaliacao])
+}
+
+model Lesion {
+  id          String     @id @default(cuid())
+  evaluation  Evaluation @relation(fields: [evaluationId], references: [id])
+  evaluationId String
+  rotulo      String
+  jsonPayload Json?
+}
+
+model Attachment {
+  id           String     @id @default(cuid())
+  evaluation   Evaluation @relation(fields: [evaluationId], references: [id])
+  evaluationId String
+  tipo         String?
+  url          String
+  filename     String?
+  createdAt    DateTime   @default(now())
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model EvaluationVersion {
+  id             String     @id @default(cuid())
+  evaluation     Evaluation @relation(fields: [evaluationId], references: [id])
+  evaluationId   String
+  jsonPayload    Json
+  confidenceMean Float?
+  transcript     String?
+  createdAt      DateTime   @default(now())
+  createdBy      String?
+}
