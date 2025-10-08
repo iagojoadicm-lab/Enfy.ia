@@ -53,10 +53,27 @@ test("fluxo de login, cadastro e exportação", async ({ page }) => {
   expect(evaluationId).toBeTruthy();
 
   await page.goto(`/avaliacoes/${evaluationId}`);
-  await expect(page.getByText("Ficha estruturada")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ficha estruturada" })).toBeVisible();
 
-  const exportResponse = await page.request.get(`/api/export/${evaluationId}.json`);
-  expect(exportResponse.ok()).toBeTruthy();
-  const exported = await exportResponse.json();
+  const paInput = page.getByLabel("PA (mmHg)");
+  await paInput.fill("120-80");
+  await page.getByRole("button", { name: "Salvar (versiona)" }).click();
+  await expect(page.getByText("Há erros de validação. Corrija antes de salvar.")).toBeVisible();
+
+  await paInput.fill("120/80");
+  const saveResponsePromise = page.waitForResponse((response) =>
+    response.url().includes(`/api/evaluations/${evaluationId}`) && response.request().method() === "PUT"
+  );
+  await page.getByRole("button", { name: "Salvar (versiona)" }).click();
+  await saveResponsePromise;
+  await expect(page.getByText("Há erros de validação. Corrija antes de salvar.")).not.toBeVisible({ timeout: 5000 });
+
+  const exportJsonResponse = await page.request.get(`/api/export/${evaluationId}.json`);
+  expect(exportJsonResponse.ok()).toBeTruthy();
+  const exported = await exportJsonResponse.json();
   expect(exported.metadados_extracao).toBeDefined();
+
+  const exportPdfResponse = await page.request.get(`/api/export/${evaluationId}.pdf`);
+  expect(exportPdfResponse.ok()).toBeTruthy();
+  expect(exportPdfResponse.headers()["content-type"]).toContain("application/pdf");
 });

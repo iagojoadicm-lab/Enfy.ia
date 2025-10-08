@@ -10,6 +10,7 @@ describe("extractStructuredData", () => {
     expect(result.jsonPayload.exame_fisico.pa_mmhg).toBe("120/80");
     expect(result.jsonPayload.exame_fisico.temperatura_c).toBe(36.5);
     expect(result.jsonPayload.patient.alergias).toContain("nega");
+    expect(result.evidencias["exame_fisico.pa_mmhg"]).toMatch(/\[00:00-00:04\]/);
     expect(result.confidenceMean).toBeGreaterThan(0.7);
   });
 });

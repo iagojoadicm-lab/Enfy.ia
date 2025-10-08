@@ -23,10 +23,20 @@ Aplicativo de prontuário inteligente com preenchimento por áudio.
    ```
 5. Acesse o app em http://localhost:3000.
 
+## Atalhos de teclado
+- `Ctrl + S`: salva a avaliação e cria uma nova versão.
+- `Ctrl + J`: exporta a avaliação atual em JSON.
+- `Ctrl + P`: exporta a avaliação atual em PDF.
+
 ## MinIO
 - Console administrativo disponível em http://localhost:9001.
 - Credenciais padrão: `minioadmin` / `minioadmin`.
 - Configure o bucket definido em `S3_BUCKET` (padrão `enfy`).
+
+## Versionamento e comparação
+- A lista de versões fica no topo da página de avaliação (`/avaliacoes/[id]`).
+- Use "Comparar com versão anterior" para evidenciar as diferenças (campos destacados em azul).
+- A ação "Duplicar para nova versão" abre uma nova avaliação pré-preenchida para o mesmo paciente.
 
 ## Autenticação
 O seed cria o usuário `admin@enfy.local` com senha `admin123`.

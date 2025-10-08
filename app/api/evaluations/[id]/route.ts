@@ -12,7 +12,13 @@ export async function GET(_request: Request, { params }: Params) {
   await requireUser();
   const evaluation = await prisma.evaluation.findUnique({
     where: { id: params.id },
-    include: { attachments: true, lesions: true }
+    include: {
+      attachments: true,
+      lesions: true,
+      versions: {
+        orderBy: { createdAt: "desc" }
+      }
+    }
   });
 
   if (!evaluation) {

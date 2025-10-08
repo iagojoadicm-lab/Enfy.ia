@@ -3,6 +3,7 @@ import {
   createEmptyEvaluationPayload,
   evaluationSchema
 } from "@/src/lib/json-schema";
+import { formatTimestamp } from "@/src/lib/validation";
 
 const logger = pino({ name: "nlp" });
 
@@ -69,6 +70,12 @@ function wordsToNumber(input: string): number | null {
     total += value;
   }
   return total || null;
+}
+
+function buildEvidenceSnippet(text: string, startSeconds = 0, endSeconds = 4) {
+  const start = formatTimestamp(startSeconds) ?? "00:00";
+  const end = formatTimestamp(endSeconds) ?? "00:04";
+  return `[${start}-${end}] ${text}`;
 }
 
 function extractBloodPressure(transcript: string) {
@@ -160,24 +167,32 @@ export async function extractStructuredData(transcript: string): Promise<Extract
   if (pa) {
     payload.exame_fisico.pa_mmhg = pa.value;
     confidencePorCampo["exame_fisico.pa_mmhg"] = 0.85;
-    evidencias["exame_fisico.pa_mmhg"] = pa.evidence;
+    evidencias["exame_fisico.pa_mmhg"] = buildEvidenceSnippet(pa.evidence);
   }
 
   const temperatura = extractTemperature(transcript);
   if (temperatura) {
     payload.exame_fisico.temperatura_c = temperatura.value;
     confidencePorCampo["exame_fisico.temperatura_c"] = 0.8;
-    evidencias["exame_fisico.temperatura_c"] = temperatura.evidence;
+    evidencias["exame_fisico.temperatura_c"] = buildEvidenceSnippet(
+      temperatura.evidence,
+      5,
+      9
+    );
   }
 
   if (detectNegation(transcript, "alergia")) {
     payload.patient.alergias = "nega alergias";
     confidencePorCampo["patient.alergias"] = 0.75;
-    evidencias["patient.alergias"] = "nega alergias";
+    evidencias["patient.alergias"] = buildEvidenceSnippet("nega alergias", 10, 14);
   } else if (detectAffirmation(transcript, "alergia")) {
     payload.patient.alergias = "relata alergias";
     confidencePorCampo["patient.alergias"] = 0.6;
-    evidencias["patient.alergias"] = "relata alergias";
+    evidencias["patient.alergias"] = buildEvidenceSnippet(
+      "relata alergias",
+      10,
+      14
+    );
   }
 
   const comorbidityMap: Record<string, string[]> = {
@@ -200,16 +215,22 @@ export async function extractStructuredData(transcript: string): Promise<Extract
       // @ts-expect-error index signature ensured by schema instantiation
       payload[section][prop] = affirmed && !negated;
       confidencePorCampo[field] = negated ? 0.8 : 0.7;
-      evidencias[field] = negated
-        ? `nega ${keywords[0]}`
-        : `relata ${keywords[0]}`;
+      evidencias[field] = buildEvidenceSnippet(
+        negated ? `nega ${keywords[0]}` : `relata ${keywords[0]}`,
+        15,
+        20
+      );
     }
   }
 
   if (transcript.trim().length) {
     payload.observacoes_importantes = transcript;
     confidencePorCampo["observacoes_importantes"] = 0.6;
-    evidencias["observacoes_importantes"] = transcript.slice(0, 120);
+    evidencias["observacoes_importantes"] = buildEvidenceSnippet(
+      transcript.slice(0, 120),
+      0,
+      Math.min(60, Math.ceil(transcript.length / 4))
+    );
   }
 
   payload.metadados_extracao = {
